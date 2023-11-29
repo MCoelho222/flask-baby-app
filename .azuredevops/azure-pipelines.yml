@@ -1,0 +1,20 @@
+resources:
+  repositories:
+    - repository: templates
+      type: git
+      ref: main
+      name: "PRJ139 - Light/infra"
+
+trigger:
+  tags:
+    include:
+      - "*"
+
+extends:
+  template: ci/main.yml@templates
+  parameters:
+    url: api/data
+    type_service: web_app
+    port: 8080
+    env_file: .env_api_data
+    sonarqube_projectid: ''

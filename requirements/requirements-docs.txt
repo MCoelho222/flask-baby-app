@@ -1,0 +1,7 @@
+sphinx>=4.0
+sphinx-autodoc-defaultargs
+sphinx-autodoc-typehints
+sphinx-copybutton>=0.3
+sphinx-design
+sphinx-rtd-theme>0.5
+sphinxcontrib-bibtex

@@ -1,0 +1,52 @@
+name: Code quality
+trigger:
+  branches:
+    include:
+    - main
+    - sandbox
+    - dev
+    - test-me-*
+pr:
+  autoCancel: True
+  branches:
+    include:
+    - main
+    - sandbox
+    - dev
+
+pool: Default
+
+variables:
+- name: "PRE_COMMIT_HOME"
+  value: $(Pipeline.Workspace)/pre-commit-cache
+
+- name: "pythonVersion"
+  value: "3.10"
+
+
+jobs:
+- job: ${{ format('codeQuality_{0}', replace(variables.pythonVersion, '.', '')) }}
+  displayName: ${{ format('Pre-commit check | Python {0}', variables.pythonVersion) }}
+
+  steps:
+  - checkout: self
+    submodules: false
+
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: $(pythonVersion)
+
+  - bash: echo "##vso[task.setvariable variable=PY]$(python -VV)"
+    displayName: set version variables
+
+  - bash: |
+        python -m pip install --upgrade pre-commit && pre-commit install
+    displayName: install pre-commit
+
+  - bash: |
+        pre-commit autoupdate
+        git diff --exit-code
+    displayName: Check pre-commit hook versions
+
+  - script: pre-commit run --all-files --show-diff-on-failure
+    displayName: Run pre-commit

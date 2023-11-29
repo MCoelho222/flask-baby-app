@@ -1,0 +1,50 @@
+name: Tests
+trigger:
+  branches:
+    include:
+    - main
+    - sandbox
+    - dev
+    - test-me-*
+pr:
+  autoCancel: True
+  branches:
+    include:
+    - main
+    - sandbox
+    - dev
+
+pool: Default
+
+variables:
+- name: "pythonVersion"
+  value: '3.10'
+
+jobs:
+- job: ${{ format('tests_{0}', replace(variables.pythonVersion, '.', '')) }}
+  displayName: ${{ format('Python {0}', variables.pythonVersion) }}
+
+  steps:
+  - checkout: self
+    submodules: false
+
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: $(pythonVersion)
+
+  - bash: echo "##vso[task.setvariable variable=PY]$(python -VV)"
+    displayName: set version variables
+
+  - bash: |
+      pip install -e .[dev] && pip install pytest-azurepipelines
+    displayName: Install development dependencies
+
+  - bash: |
+      coverage erase && coverage run -m pytest tests/ && coverage xml -o coverage.xml
+    displayName: Run tests
+
+  - task: PublishCodeCoverageResults@1
+    inputs:
+      codeCoverageTool: Cobertura
+      summaryFileLocation: coverage.xml
+    displayName: Publish coverage artifact

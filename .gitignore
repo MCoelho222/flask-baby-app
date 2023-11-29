@@ -1,0 +1,142 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Local configuration file (this is usually used for sensitive information like API keys)
+instance/
+.editorconfig
+
+# Environment variables file
+.env
+
+# Compiled files
+*.pyc
+*.pyo
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.coverage
+
+# Dependency directories
+venv/
+env/
+env3/
+venv3/
+
+# docs
+_build/
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
+
+# IDE files
+.idea/
+.vscode/
+
+# Compiled source
+__pycache__/
+*.pyc
+
+# Flask debug log
+flask-debug.log
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+
+# Sensitive or high-churn files
+*.log
+*.sqlite3
+
+# Editor/IDE specific files
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.pyproj
+*.user
+*.vscode/
+*.sublime-project
+*.sublime-workspace
+*.komodoproject
+.komodotools/
+.komodotools-*/
+
+# Database files
+*.db
+
+# Flask Migration
+/migrations/
+
+# SQLAlchemy
+sqlar-migrate-data.json
+
+# PyInstaller
+dist/
+build/
+
+# celery beat schedule file
+celerybeat-schedule
+
+# SageMath parsed files
+*.sage.py
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Spyder project settings
+.spyderproject
+.spyproject
+
+# Rope project settings
+.ropeproject
+
+# mkdocs documentation
+/site
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+mypy.json
+
+# Pyre type checker
+.pyre/
+
+# pyenv
+.python-version
+
+# pipenv
+# Pipfile
+Pipfile.lock
+
+# Poetry
+poetry.lock
+
+# Red Hat
+.cache/
+.redhat/
+
+# Windows
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+ehthumbs.db
+
+# macOS
+.DS_Store
+
+# Node
+node_modules/
+
+# .ruff_cache
