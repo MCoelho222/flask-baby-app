@@ -1,7 +1,7 @@
 [project]
 name = "data-api"
 description = "Python package within a data API"
-authors = [{name = "PixForce", email = "contato@pixforce.ai"}]
+authors = [{name = "Marcelo Coelho", email = "mcoelho2011@hotmail.com"}]
 requires-python = ">=3.8"
 classifiers = [
   "Programming Language :: Python :: 3 :: Only",
@@ -44,7 +44,7 @@ requires = [
   universal = true
 
 [project.scripts]
-light-data-api = "data_api:__main__.main"
+data-api = "data_api:__main__.main"
 [tool.ruff]
   line-length = 128
   target-version = "py38"

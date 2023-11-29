@@ -1,7 +1,7 @@
 """
-Light Data API Module.
+Data API Module.
 
-This module contains the main components to run the Light Data API
+This module contains the main components to run the Data API
 using Flask. It includes functions to create the Flask application
 (`create_app`), handle database sessions after each request
 (`session_clear`), and serve as the main entry point for running
@@ -9,7 +9,7 @@ the API (`main`).
 
 Usage:
 -----
-    - Run `light-data-api` to start the Light Data API.
+    - Run `data-api` to start the Data API.
 """
 from __future__ import annotations
 
@@ -80,7 +80,7 @@ def session_clear(exception: Exception) -> None:
 
 def main() -> None:
     """
-    Entry point for running the Light Data API.
+    Entry point for running the Data API.
 
     Initialize the database, configure the application,
     and start Flask development server or production server
@@ -89,9 +89,9 @@ def main() -> None:
 
     Usage
     -----
-        Run this script to start the Light Data API.
+        Run this script to start the Data API.
     """
-    logger.info('Light Data Api, version %s is running on port %s', data_api.__version__, FLASK_PORT)
+    logger.info('Data Api, version %s is running on port %s', data_api.__version__, FLASK_PORT)
 
     try:
         db.init_app(app)

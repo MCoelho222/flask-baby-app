@@ -1,5 +1,5 @@
 """
-Light Data Api.
+Data Api.
 
 This the backend script for the UI platform. It receives
 the requests and communicates with the database sending back

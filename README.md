@@ -25,7 +25,7 @@ pip install -e .[dev]
 
 **Run**
 ```shell
-light-data-api # or python -m src
+data-api # or python -m src
 ```
 <br>
 
@@ -35,10 +35,10 @@ light-data-api # or python -m src
 docker network create light-network
 ```
 ```
-docker build -t light-data-api .
+docker build -t data-api .
 ```
 ```
-docker run --name light-data-api -dp 8080:8080 --network light-network --network-alias light-data-api light-data-api
+docker run --name data-api -dp 8080:8080 --network my-network --network-alias data-api data-api
 ```
 <br>
 
@@ -46,7 +46,7 @@ docker run --name light-data-api -dp 8080:8080 --network light-network --network
 
 **Postgres**
 ```
-docker run --name light-db -dp 5436:5432 --network light-network --network-alias light-db -e POSTGRES_PASSWORD=mcoelho -e POSTGRES_USER=mcoelho -e POSTGRES_DB=light postgis/postgis:16-3.4
+docker run --name data-api-db -dp 5436:5432 --network my-network --network-alias my-db -e POSTGRES_PASSWORD=password -e POSTGRES_USER=username -e POSTGRES_DB=data-api postgis/postgis:16-3.4
 ```
 <br>
 
@@ -58,7 +58,7 @@ alembic upgrade head
 
 ## Keycloak
 ```
-docker run --name light-keycloak -dp 8081:8080 -e KEYCLOAK_ADMIN=admin -e KEYCLOAK_ADMIN_PASSWORD=admin quay.io/keycloak/keycloak:22.0.5 start-dev
+docker run --name keycloak -dp 8081:8080 -e KEYCLOAK_ADMIN=admin -e KEYCLOAK_ADMIN_PASSWORD=admin quay.io/keycloak/keycloak:22.0.5 start-dev
 ```
 <br>
 
@@ -72,5 +72,5 @@ pytest -p no:warnings
 
 **Postgres**
 ```
-docker run --name light-test-db -dp 5437:5432 -e POSTGRES_PASSWORD=mcoelho -e POSTGRES_USER=mcoelho -e POSTGRES_DB=light-test postgis/postgis:16-3.4
+docker run --name test-db -dp 5437:5432 -e POSTGRES_PASSWORD=password -e POSTGRES_USER=username -e POSTGRES_DB=test postgis/postgis:16-3.4
 ```
