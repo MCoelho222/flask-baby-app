@@ -1,4 +1,4 @@
-# Light Data Api
+# Data Api
 
 ## Developer
 
@@ -32,7 +32,7 @@ data-api # or python -m src
 ### Running with Docker
 
 ```
-docker network create light-network
+docker network create my-network
 ```
 ```
 docker build -t data-api .
