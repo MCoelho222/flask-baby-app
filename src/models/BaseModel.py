@@ -1,4 +1,4 @@
-"""Basic methods for child classes."""
+"""Common methods for Model classes."""
 from __future__ import annotations
 
 import logging
@@ -27,11 +27,11 @@ logger = logging.getLogger(__name__)
 session = db.session
 
 
-class BaseMixInModel:
+class BaseModel:
     """
     Provide common functionalities.
 
-    BaseMixInModel provides common functionality to be
+    BaseModel provides common functionality to be
     inherited by SQLAlchemy model classes.
     """
 
