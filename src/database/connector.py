@@ -14,11 +14,11 @@ class Base(DeclarativeBase):
 
     This module defines the base SQLAlchemy model class, 'Base'.
     Instances of 'Base' are used as the foundation for defining
-    database models in the Light Data API.
+    database models in the Flask Baby App API.
 
     Usage:
     ------
-    1. Inherit from 'Base' to define database models for the Light Data API.
+    1. Inherit from 'Base' to define database models for the Flask Baby App API.
     2. Use the 'db' instance for various database operations.
 
     Example:

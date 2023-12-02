@@ -1,7 +1,7 @@
 """Define functions fixtures teardown."""
 from __future__ import annotations
 
-from data_api.database.connector import db
+from flask_baby_app.database.connector import db
 
 
 def teardown_remove_all_from_db(entity: db.Model) -> None:

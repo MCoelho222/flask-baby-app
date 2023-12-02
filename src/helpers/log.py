@@ -12,7 +12,7 @@ from logging.handlers import TimedRotatingFileHandler
 import flask
 from flask import Flask, Response, request
 
-from data_api.config import ENV
+from flask_baby_app.config import ENV
 
 
 def setup(app: Flask) -> None:

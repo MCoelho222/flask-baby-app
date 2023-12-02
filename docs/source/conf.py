@@ -61,7 +61,7 @@ html_theme_options = {
     'navigation_with_keys': True,
 }
 
-htmlhelp_basename = 'data_api'
+htmlhelp_basename = 'flask_baby_app'
 # html_css_files = ['css/main.css']
 # html_js_files = ['js/custom.js']
 

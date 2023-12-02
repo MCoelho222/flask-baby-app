@@ -9,10 +9,10 @@ from flask import request
 from keycloak.exceptions import KeycloakError
 from keycloak.keycloak_openid import KeycloakOpenID
 
-from data_api.config import KC_BACKEND_CLIENT_ID, KC_CLIENT_SECRET, KC_REALM, KC_SERVER_URL
-from data_api.helpers.auth import get_public_key, has_required_roles
-from data_api.helpers.errors import BussinesRulesError
-from data_api.helpers.exceptions import Error, handle_exception_msg
+from flask_baby_app.config import KC_BACKEND_CLIENT_ID, KC_CLIENT_SECRET, KC_REALM, KC_SERVER_URL
+from flask_baby_app.helpers.auth import get_public_key, has_required_roles
+from flask_baby_app.helpers.errors import BussinesRulesError
+from flask_baby_app.helpers.exceptions import Error, handle_exception_msg
 
 logger = logging.getLogger(__name__)
 

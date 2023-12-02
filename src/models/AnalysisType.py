@@ -12,12 +12,12 @@ from typing import TYPE_CHECKING
 
 import humps
 
-from data_api.database.connector import db
-from data_api.helpers.exceptions import handle_exception_msg
-from data_api.models.BaseModel import BaseModel
+from flask_baby_app.database.connector import db
+from flask_baby_app.helpers.exceptions import handle_exception_msg
+from flask_baby_app.models.BaseModel import BaseModel
 
 if TYPE_CHECKING:
-    from data_api.helpers.exceptions import Error
+    from flask_baby_app.helpers.exceptions import Error
 
 logger = logging.getLogger(__name__)
 

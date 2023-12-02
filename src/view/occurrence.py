@@ -24,11 +24,11 @@ import logging
 import humps
 from flask_restx import Resource
 
-from data_api.auth.auth_decorators import token_required
-from data_api.controllers.OccurrenceController import OccurrenceController
-from data_api.helpers.exceptions import Error
-from data_api.models.Occurrence import Occurrence
-from data_api.schemas.OccurrenceDto import OccurrenceDto
+from flask_baby_app.auth.auth_decorators import token_required
+from flask_baby_app.controllers.OccurrenceController import OccurrenceController
+from flask_baby_app.helpers.exceptions import Error
+from flask_baby_app.models.Occurrence import Occurrence
+from flask_baby_app.schemas.OccurrenceDto import OccurrenceDto
 
 logger = logging.getLogger(__name__)
 

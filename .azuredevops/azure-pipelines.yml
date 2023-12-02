@@ -3,7 +3,7 @@ resources:
     - repository: templates
       type: git
       ref: main
-      name: "PRJ139 - Light/infra"
+      name: "PRJ139 - Mcoelho/infra"
 
 trigger:
   tags:

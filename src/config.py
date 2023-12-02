@@ -1,5 +1,5 @@
 """
-Configurations for Light Data Api.
+Configurations for Flask Baby App Api.
 
 1. Set the SQLALCHEMY_DATABASE_URI
 2. Set the development and production classes
@@ -42,6 +42,11 @@ else:
 
 ENV = os.environ.get('FLASK_ENV')
 FLASK_PORT = os.environ.get('FLASK_PORT')
+
+KC_REALM = os.environ.get('KC_REALM')
+KC_SERVER_URL = os.environ.get('KC_SERVER_URL')
+KC_BACKEND_CLIENT_ID = os.environ.get('KC_BACKEND_CLIENT_ID')
+KC_CLIENT_SECRET = os.environ.get('KC_BACKEND_CLIENT_SECRET')
 
 
 class Config:

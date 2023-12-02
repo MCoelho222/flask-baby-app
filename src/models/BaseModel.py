@@ -7,9 +7,9 @@ from typing import TYPE_CHECKING, Any, Iterable, Iterator, TypeVar
 
 from sqlalchemy.exc import SQLAlchemyError
 
-from data_api.database.connector import db
-from data_api.helpers.errors import BussinesRulesError
-from data_api.helpers.exceptions import handle_exception_msg
+from flask_baby_app.database.connector import db
+from flask_baby_app.helpers.errors import BussinesRulesError
+from flask_baby_app.helpers.exceptions import handle_exception_msg
 
 # Type-checking imports
 if TYPE_CHECKING:
@@ -20,7 +20,7 @@ if TYPE_CHECKING:
     from sqlalchemy.orm import Query
     from typing_extensions import Self
 
-    from data_api.helpers.exceptions import Error
+    from flask_baby_app.helpers.exceptions import Error
 
 logger = logging.getLogger(__name__)
 

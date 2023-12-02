@@ -4,11 +4,11 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from data_api.database.connector import db
+from flask_baby_app.database.connector import db
 
 if TYPE_CHECKING:
-    from data_api.controllers.OccurrenceController import OccurrenceController
-    from data_api.types.payloads import OccurrencePayloadType
+    from flask_baby_app.controllers.OccurrenceController import OccurrenceController
+    from flask_baby_app.types.payloads import OccurrencePayloadType
 
     types_controllers = OccurrenceController  # in the future: Model1 | Model2 | ...
 

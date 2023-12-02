@@ -28,8 +28,8 @@ from __future__ import annotations
 from flask import Blueprint, current_app
 from flask_restx import Api
 
-import data_api
-from data_api.view.occurrence import api as occurrence_namespace
+import flask_baby_app
+from flask_baby_app.view.occurrence import api as occurrence_namespace
 
 
 def configure_blueprint() -> None:
@@ -64,7 +64,7 @@ def configure_blueprint() -> None:
     api = Api(
         blueprint,
         title='Transmission Line Service API',
-        version=data_api.__version__,
+        version=flask_baby_app.__version__,
         description='Powered by Pix Force',
         security='apikey',
     )

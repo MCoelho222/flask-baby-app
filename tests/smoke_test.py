@@ -3,18 +3,18 @@ from __future__ import annotations
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 
-import data_api
-from data_api.__main__ import app
-from data_api.auth.auth_decorators import token_required
-from data_api.config import SQLALCHEMY_DATABASE_URI, config_by_name
-from data_api.database.connector import db
-from data_api.helpers.auth import get_public_key, has_required_roles
-from data_api.helpers.exceptions import handle_exception_msg
+import flask_baby_app
+from flask_baby_app.__main__ import app
+from flask_baby_app.auth.auth_decorators import token_required
+from flask_baby_app.config import SQLALCHEMY_DATABASE_URI, config_by_name
+from flask_baby_app.database.connector import db
+from flask_baby_app.helpers.auth import get_public_key, has_required_roles
+from flask_baby_app.helpers.exceptions import handle_exception_msg
 
 
-def test_data_api_version():
-    """Test import data_api correctly."""
-    assert isinstance(data_api.__version__, str)
+def test_flask_baby_app_version():
+    """Test import flask_baby_app correctly."""
+    assert isinstance(flask_baby_app.__version__, str)
 
 
 def test_app_instance():

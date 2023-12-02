@@ -5,9 +5,9 @@ import logging
 import pytest
 from keycloak.keycloak_openid import KeycloakOpenID
 
-from data_api.__main__ import create_app
-from data_api.database.connector import db
-from data_api.view import configure_blueprint
+from flask_baby_app.__main__ import create_app
+from flask_baby_app.database.connector import db
+from flask_baby_app.view import configure_blueprint
 from testing.helpers.keycloak import KeycloakData as kc
 
 logger = logging.getLogger(__name__)

@@ -1,7 +1,7 @@
 """
-Data API Module.
+Flask Baby App API Module.
 
-This module contains the main components to run the Data API
+This module contains the main components to run the API
 using Flask. It includes functions to create the Flask application
 (`create_app`), handle database sessions after each request
 (`session_clear`), and serve as the main entry point for running
@@ -9,7 +9,7 @@ the API (`main`).
 
 Usage:
 -----
-    - Run `data-api` to start the Data API.
+    - Run `flsk-baby-app` to start the Flask Baby App API.
 """
 from __future__ import annotations
 
@@ -21,11 +21,11 @@ from psycopg2.errors import OperationalError
 from sqlalchemy.exc import SQLAlchemyError
 from waitress import serve
 
-import data_api
-from data_api.config import ENV, FLASK_PORT, config_by_name
-from data_api.database.connector import db
-from data_api.helpers import log
-from data_api.view import configure_blueprint
+import flask_baby_app
+from flask_baby_app.config import ENV, FLASK_PORT, config_by_name
+from flask_baby_app.database.connector import db
+from flask_baby_app.helpers import log
+from flask_baby_app.view import configure_blueprint
 
 logger = logging.getLogger(__name__)
 
@@ -80,7 +80,7 @@ def session_clear(exception: Exception) -> None:
 
 def main() -> None:
     """
-    Entry point for running the Data API.
+    Entry point for running the Flask Baby App API.
 
     Initialize the database, configure the application,
     and start Flask development server or production server
@@ -89,9 +89,9 @@ def main() -> None:
 
     Usage
     -----
-        Run this script to start the Data API.
+        Run this script to start the Flask Baby App API.
     """
-    logger.info('Data Api, version %s is running on port %s', data_api.__version__, FLASK_PORT)
+    logger.info('Flask Baby App Api, version %s is running on port %s', flask_baby_app.__version__, FLASK_PORT)
 
     try:
         db.init_app(app)

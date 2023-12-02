@@ -10,5 +10,5 @@ COPY .env .env
 
 EXPOSE 8080
 
-CMD ["light-data-api"]
+CMD ["flask-baby-app"]
 # or "CMD ['python', '-m', 'src']"

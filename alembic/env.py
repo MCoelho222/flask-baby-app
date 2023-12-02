@@ -2,8 +2,8 @@ from __future__ import annotations
 
 from logging.config import fileConfig
 
-from data_api.config import SQLALCHEMY_DATABASE_URI
-from data_api.models.Occurrence import Occurrence
+from flask_baby_app.config import SQLALCHEMY_DATABASE_URI
+from flask_baby_app.models.Occurrence import Occurrence
 from sqlalchemy import engine_from_config, pool
 
 from alembic import context

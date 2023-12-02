@@ -31,7 +31,7 @@ dynamic = [
 
   [tool.setuptools.dynamic]
     dependencies = {file = ["requirements/requirements.txt"]}
-    version = {attr = "data_api.__version__"}
+    version = {attr = "flask_baby_app.__version__"}
     readme = {file = ["README.md"], content-type = "text/markdown"}
 
   [tool.setuptools.dynamic.optional-dependencies]
@@ -39,72 +39,72 @@ dynamic = [
     docs = {file = "requirements/requirements-docs.txt"}
 
   [tool.setuptools.package-dir]
-    data_api = "src"
+    flask_baby_app = "src"
 
 [tool.distutils.bdist_wheel]
   universal = true
 
 [project.scripts]
-data-api = "data_api:__main__.main"
+flask-baby-app = "flask_baby_app:__main__.main"
 [tool.ruff]
   line-length = 128
   target-version = "py38"
   select = [
     "AIR",    # Airflow
-    "ASYNC",  # flake8-async
-    "BLE",    # flake8-blind-except
-    "C4",     # flake8-comprehensions
+    "ASYNC",  # flaske8-async
+    "BLE",    # flaske8-blind-except
+    "C4",     # flaske8-comprehensions
     "C90",    # McCabe cyclomatic complexity
     # "CPY",    # Copyright-related rules
-    "DTZ",    # flake8-datetimez
+    "DTZ",    # flaske8-datetimez
     "E",      # pycodestyle
-    "F",      # Pyflakes
+    "F",      # Pyflaskes
     "FLY",    # flynt
     "I",      # isort
-    "ICN",    # flake8-import-conventions
-    "INT",    # flake8-gettext
+    "ICN",    # flaske8-import-conventions
+    "INT",    # flaske8-gettext
     "NPY",    # NumPy-specific rules
     "PL",     # Pylint
-    "PYI",    # flake8-pyi
-    "RSE",    # flake8-raise
+    "PYI",    # flaske8-pyi
+    "RSE",    # flaske8-raise
     "RUF",    # Ruff-specific rules
-    "S",      # flake8-bandit
-    "SLOT",   # flake8-slots
-    "T10",    # flake8-debugger
-    "TID",    # flake8-tidy-imports
+    "S",      # flaske8-bandit
+    "SLOT",   # flaske8-slots
+    "T10",    # flaske8-debugger
+    "TID",    # flaske8-tidy-imports
     "UP",     # pyupgrade
     "W",      # pycodestyle
-    "YTT",    # flake8-2020
-    # "A",    # flake8-builtins
-    # "ANN",  # flake8-annotations
-    "ARG",  # flake8-unused-arguments
-    "B",    # flake8-bugbear
-    # "COM",  # flake8-commas
+    "YTT",    # flaske8-2020
+    # "A",    # flaske8-builtins
+    # "ANN",  # flaske8-annotations
+    "ARG",  # flaske8-unused-arguments
+    "B",    # flaske8-bugbear
+    # "COM",  # flaske8-commas
     "D",    # pydocstyle
-    # "DJ",   # flake8-django
-    "EM",   # flake8-errmsg
+    # "DJ",   # flaske8-django
+    "EM",   # flaske8-errmsg
     # "ERA",  # eradicate
-    # "EXE",  # flake8-executable
-    "FA",   # flake8-future-annotations
-    "FBT",  # flake8-boolean-trap
-    # "FIX",  # flake8-fixme
-    "G",    # flake8-logging-format
-    # "INP",  # flake8-no-pep420
-    # "ISC",  # flake8-implicit-str-concat
+    # "EXE",  # flaske8-executable
+    "FA",   # flaske8-future-annotations
+    "FBT",  # flaske8-boolean-trap
+    # "FIX",  # flaske8-fixme
+    "G",    # flaske8-logging-format
+    # "INP",  # flaske8-no-pep420
+    # "ISC",  # flaske8-implicit-str-concat
     # "N",    # pep8-naming
     # "PD",   # pandas-vet
     # "PERF", # Perflint
     # "PGH",  # pygrep-hooks
-    # "PIE",  # flake8-pie
-    "PT",   # flake8-pytest-style
-    # "PTH",  # flake8-use-pathlib
-    # "Q",    # flake8-quotes
-    # "RET",  # flake8-return
-    # "SIM",  # flake8-simplify
-    # "SLF",  # flake8-self
-    # "T20",  # flake8-print
-    "TCH",  # flake8-type-checking
-    "TD",   # flake8-todos
+    # "PIE",  # flaske8-pie
+    "PT",   # flaske8-pytest-style
+    # "PTH",  # flaske8-use-pathlib
+    # "Q",    # flaske8-quotes
+    # "RET",  # flaske8-return
+    # "SIM",  # flaske8-simplify
+    # "SLF",  # flaske8-self
+    # "T20",  # flaske8-print
+    "TCH",  # flaske8-type-checking
+    "TD",   # flaske8-todos
     # "TRY",  # tryceratops
   ]
 
@@ -113,7 +113,7 @@ data-api = "data_api:__main__.main"
     skip-magic-trailing-comma = false
 
   [tool.ruff.isort]
-    known-first-party = ["data_api", "tests", "testing"]
+    known-first-party = ["src", "tests", "testing", "flask_baby_app"]
     split-on-trailing-comma = true
     required-imports = ["from __future__ import annotations"]
 
