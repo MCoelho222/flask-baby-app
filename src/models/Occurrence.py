@@ -11,25 +11,26 @@ from __future__ import annotations
 import json
 import logging
 from datetime import timedelta
-from typing import Any
+from typing import TYPE_CHECKING
 
 import humps
 
 from data_api.database.connector import db
 from data_api.helpers.exceptions import handle_exception_msg
-from data_api.models.BaseMixInModel import BaseMixInModel
 from data_api.models.BaseModel import BaseModel
+
+if TYPE_CHECKING:
+    from data_api.helpers.exceptions import Error
 
 logger = logging.getLogger(__name__)
 
 
-class Occurrence(BaseModel, BaseMixInModel):
+class Occurrence(BaseModel):
     """
     Occurrence Class.
 
     Represents an occurrence in the database.
-    Inherits common functionalities from 'BaseModel'
-    and 'BaseMixInModel'.
+    Inherits common functionalities from 'BaseModel'.
 
     Attributes
     ----------
@@ -43,9 +44,6 @@ class Occurrence(BaseModel, BaseMixInModel):
 
     Methods
     -------
-        query_to_json(object)
-            Converts a SQLAlchemy object to a JSON
-            representation.
         to_json()
             Converts the Occurrence instance to a
             JSON representation, handling datetime
@@ -55,6 +53,7 @@ class Occurrence(BaseModel, BaseMixInModel):
     __tablename__ = 'occurrence'
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True, nullable=False)
+    analysis_id = db.Column(db.Integer, db.ForeignKey(''), nullable=False)
     type_tag = db.Column(db.String, nullable=False)
     description = db.Column(db.String, nullable=True)
     resume = db.Column(db.String, nullable=False)
@@ -62,25 +61,7 @@ class Occurrence(BaseModel, BaseMixInModel):
     register_at = db.Column(db.DateTime(), nullable=False)
     update_at = db.Column(db.DateTime(), nullable=False)
 
-    @staticmethod
-    def query_to_json(object: Any) -> dict[str, str]:
-        """
-        Convert a SQLAlchemy object to a JSON representation.
-
-        Parameters
-        ----------
-            object
-                The SQLAlchemy object to be converted.
-
-        Returns
-        -------
-            A dictionary representing the JSON representation
-            of the SQLAlchemy object.
-        """
-        data = object.to_json()
-        return data
-
-    def to_json(self) -> dict[str, str]:
+    def to_json(self) -> str | Error:
         """
         Convert to json.
 

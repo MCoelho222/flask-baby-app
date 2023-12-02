@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 import logging
-import os
 from functools import wraps
 from typing import Callable, Iterable, ParamSpec, TypeVar
 
@@ -10,16 +9,12 @@ from flask import request
 from keycloak.exceptions import KeycloakError
 from keycloak.keycloak_openid import KeycloakOpenID
 
+from data_api.config import KC_BACKEND_CLIENT_ID, KC_CLIENT_SECRET, KC_REALM, KC_SERVER_URL
 from data_api.helpers.auth import get_public_key, has_required_roles
 from data_api.helpers.errors import BussinesRulesError
 from data_api.helpers.exceptions import Error, handle_exception_msg
 
 logger = logging.getLogger(__name__)
-
-REALM = os.environ.get('KC_REALM')
-SERVER_URL = os.environ.get('KC_SERVER_URL')
-BACKEND_CLIENT_ID = os.environ.get('KC_BACKEND_CLIENT_ID')
-CLIENT_SECRET = os.environ.get('KC_BACKEND_CLIENT_SECRET')
 
 P = ParamSpec('P')
 F = TypeVar('F')
@@ -77,10 +72,10 @@ def token_required(required_roles: Iterable[str]) -> Callable[[Callable[P, F]], 
                 token = authorization.split(' ')[1]
 
             keycloak_openid = KeycloakOpenID(
-                server_url=SERVER_URL,
-                clientid=BACKEND_CLIENT_ID,
-                realm_name=REALM,
-                client_secret_key=CLIENT_SECRET,
+                server_url=KC_SERVER_URL,
+                clientid=KC_BACKEND_CLIENT_ID,
+                realm_name=KC_REALM,
+                client_secret_key=KC_CLIENT_SECRET,
                 verify=False,
             )
             decoded_key = get_public_key(keycloak_openid)

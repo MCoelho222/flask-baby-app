@@ -1,43 +1,93 @@
-"""Methods for CRUD operations in child classes."""
+"""Basic methods for child classes."""
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING, Any
+from datetime import datetime
+from typing import TYPE_CHECKING, Any, Iterable, Iterator, TypeVar
 
 from sqlalchemy.exc import SQLAlchemyError
 
-from data_api.database.connector import DBModel, db
+from data_api.database.connector import db
 from data_api.helpers.errors import BussinesRulesError
 from data_api.helpers.exceptions import handle_exception_msg
 
-logger = logging.getLogger(__name__)
-
 # Type-checking imports
 if TYPE_CHECKING:
+    T = TypeVar('T')
     from uuid import UUID
 
+    from sqlalchemy import Column, Table
     from sqlalchemy.orm import Query
+    from typing_extensions import Self
+
+    from data_api.helpers.exceptions import Error
+
+logger = logging.getLogger(__name__)
+
+session = db.session
 
 
-class BaseModel:
+class BaseMixInModel:
     """
     Provide common functionalities.
 
-    BaseModel provides common functionality to be
+    BaseMixInModel provides common functionality to be
     inherited by SQLAlchemy model classes.
     """
 
-    __abstract__ = True
+    __table__: Table
+    id: Column
+    name: Column
 
-    @staticmethod
-    def query(cls: DBModel) -> Query:
+    def __iter__(self) -> Iterator[tuple[str, Any]]:
+        """
+        Yield pairs of column names and values.
+
+        Iterate over the columns of the SQLAlchemy model
+        and yield pairs of column names and values.
+
+        Yields
+        ------
+            Pairs of column names and values for each
+            column in the model.
+        """
+        for x in self.__class__.__table__.columns:
+            yield x.name, self.__getattribute__(x.name)
+
+    def __str__(self) -> str:
+        """
+        Generate a human-readable string.
+
+        Generate a human-readable string representation of
+        the SQLAlchemy model instance.
+
+        Returns
+        -------
+            A formatted string representing the model
+            instance, excluding the 'id' field.
+        """
+        fields = {k: getattr(self, k) for k in self.__class__.__table__.columns.keys() if k != 'id'}
+        str_fields = ', '.join([f'{k}={v}' for k, v in fields.items()])
+        return f'<{self.__class__.__name__} {self.id} ({str_fields})>'
+
+    def __repr__(self) -> str:
+        """
+        Generate a string representation.
+
+        Generate a string representation of the SQLAlchemy
+        model instance suitable for debugging.
+
+        Returns
+        -------
+            A string representation of the model instance,
+            delegated to the __str__ method.
+        """
+        return str(self)
+
+    @classmethod
+    def query(cls) -> Query:
         """
         Construct and return an SQLAlchemy Query instance.
-
-        Parameters
-        ----------
-            cls
-                The SQLAlchemy model class.
 
         Returns
         -------
@@ -45,117 +95,108 @@ class BaseModel:
             the specified model class.
         """
         try:
-            query = db.session.query(cls).select_from(cls)
+            query = session.query(cls).select_from(cls)
             return query
+
         except SQLAlchemyError as e:
             msg = 'Query failed for %s.' % cls.__name__
             return handle_exception_msg(e, msg)
 
     @staticmethod
-    def get_by_id_to_json(cls: DBModel, id: str | int | UUID) -> dict[str, str]:
+    def query_to_json(query_object: Any) -> str:
         """
-        Retrieve a dictionary representation of a database record based on its ID.
+        Convert a SQLAlchemy object to a JSON representation.
 
         Parameters
         ----------
-            cls
-                The SQLAlchemy model class.
-            id
-                The ID of the record to retrieve.
+            query_object
+                The SQLAlchemy object to be converted.
 
         Returns
         -------
-            A dictionary representation of the record,
-            or an empty dictionary if not found.
+            A dictionary representing the JSON representation
+            of the SQLAlchemy object.
         """
-        try:
-            db_cls = cls.query(cls).filter(cls.id == id).first()
-            if not db_cls:
-                logger.info('No items found for id %s', id)
-                return {}
-            return cls.query_to_json(db_cls)
+        data = query_object.to_json()
+        return data
 
-        except SQLAlchemyError as e:
-            msg = 'Failed to get %s' % cls.__name__
-            return handle_exception_msg(e, msg)
-
-    @staticmethod
-    def get_group_to_json(cls: DBModel, filter_obj: dict[str, Any]) -> list[dict[str, str]] | dict[str, str]:
+    @classmethod
+    def create(cls, payload: dict[str, Any], *, to_json: bool = False) -> str | Self | Error:
         """
-        Retrieve a list of entity items.
-
-        Retrieve a list of dictionary representations of database
-        records based on filtering criteria.
+        Create item in Occurrence entity.
 
         Parameters
         ----------
-            cls
-                The SQLAlchemy model class.
-            filter_obj
-                A dictionary containing filtering criteria as
-                key-value pairs.
+            payload
+                Dictionary with the required fields from
+                Occurrence entity.
 
         Returns
         -------
-            A list of dictionary representations of matching
-            records or a dictionary with error message.
-        """
-        group = []
-        try:
-            data = cls.query(cls)
-            for key, value in filter_obj.items():
-                if hasattr(cls, key):
-                    data = data.filter(getattr(cls, key) == value)
-                # value = filter_obj[key]
-            data = data.all()
-            if data:
-                for row in data:
-                    group.append(cls.query_to_json(row))
-            if len(group) == 0:
-                logger.info('No items found for specified filters: %s', filter_obj)
-            return group
-
-        except (TypeError, AttributeError, SQLAlchemyError) as e:
-            msg = 'Failed to get %s.' % cls.__name__
-            return handle_exception_msg(e, msg)
-
-    @staticmethod
-    def get_all_to_json(cls: DBModel) -> list[dict[str, str]] | dict[str, str]:
-        """
-        Retrieve all records from model.
-
-        Retrieve all records of the specified SQLAlchemy model
-        class and convert them to a list of dictionaries.
-
-        Parameters
-        ----------
-            cls
-                The SQLAlchemy model class.
-
-        Returns
-        -------
-            - A list of dictionaries representing the records
-            of the specified model class if records are found.
-            - An empty list if no records are found.
-            - A dictionary containing an error message if an
-            exception occurs during the retrieval process.
+            json
+                A json of the created item.
         """
         try:
-            data = []
-            db_cls = cls.query(cls).all()
-            if db_cls:
-                for row in db_cls:
-                    data.append(cls.query_to_json(row))
-            if len(data) == 0:
-                logger.info('No items found.')
+            data = cls(**payload)
+            db.session.add(data)
+            db.session.commit()
+            if data and to_json:
+                return cls.query_to_json(data)
             return data
 
         except SQLAlchemyError as e:
-            msg = 'Failed to get %s.' % cls.__name__
+            msg = 'Failed to create Occurrence.'
+            logger.exception(e)
+            db.session.rollback()
             return handle_exception_msg(e, msg)
 
-    @staticmethod
-    def update(cls: DBModel, id: str | int | UUID, payload: dict[str, str]) -> list[dict[str, str]] | dict[str, str]:
+    @classmethod
+    def get(
+        cls, id: str | int | UUID | None = None, *, to_json: bool = False
+    ) -> Self | list[Self] | str | list[str] | Error | None:
+        """
+        Retrieve a Model instance from the database.
+
+        Parameters
+        ----------
+            id
+                id to search for in the database.
+            to_json
+                keyword-only argument. if true, instance is converted to json.
+
+        Returns
+        -------
+            - If id is passed, return the instance with the id, otherwise
+            return a list of all instances.
+            - If an instance or instances of Model are found, returns
+            the instance(s) or a json representation of the instance(s).
+            - If no Model instance is found with the given
+            name, returns None
+            - If an SQLAlchemy error occurs during the query,
+            raises an exception with an error message.
+        """
+        try:
+            if id:
+                data = cls.query().filter(cls.id == id).first()
+                if not data:
+                    logger.debug('No %s found with id: %s', cls.__name__, id)
+            else:
+                data = cls.query().all()
+                if len(data) == 0:
+                    logger.debug('No items found in %s.', cls.__name__)
+            if data and to_json:
+                if isinstance(data, list):
+                    return [item.to_json() for item in data]
+                return cls.query_to_json(data)
+            return data
+
+        except SQLAlchemyError as e:
+            logger.exception(e)
+            msg = f'Error querying {cls.__name__}'
+            return handle_exception_msg(e, msg)
+
+    @classmethod
+    def update(cls, id: str | int | UUID, payload: dict[str, str], *, to_json: bool = False) -> Self | str | dict[str, str]:
         """
         Update a record of the model.
 
@@ -164,13 +205,13 @@ class BaseModel:
 
         Parameters
         ----------
-            cls
-                The SQLAlchemy model class.
             id
                 The identifier of the record to be updated.
             payload
                 A dictionary containing the attributes and their
                 updated values.
+            to_json
+                keyword-only argument. if true, instance is converted to json.
 
         Returns
         -------
@@ -182,24 +223,26 @@ class BaseModel:
             exception occurs during the update process.
         """
         try:
-            db_cls = cls.query(cls).filter(cls.id == id).first()
-            if not db_cls:
+            data = cls.query().filter(cls.id == id).first()
+            if not data:
                 logger.info('Items not found for specified id: %s', id)
                 msg = 'Failed to update %s.' % cls.__name__
-                return handle_exception_msg(BussinesRulesError(msg), 'id not found.')
+                e = BussinesRulesError(msg)
+                return handle_exception_msg(e, 'id not found.')
             for key, value in payload.items():
-                setattr(db_cls, key, value)
-            db.session.commit()
-
-            return db_cls.to_json()
+                setattr(data, key, value)
+            session.commit()
+            if data and to_json:
+                return cls.query_to_json(data)
+            return data
 
         except SQLAlchemyError as e:
-            db.session.rollback()
+            session.rollback()
             msg = 'Failed to update %s.' % cls.__name__
             return handle_exception_msg(e, msg)
 
-    @staticmethod
-    def delete(cls: DBModel, id: str | int | UUID) -> list[dict[str, str]] | dict[str, str]:
+    @classmethod
+    def delete(cls, id: str | int | UUID | None = None, *, to_json: bool = False) -> Self | str | bool | Error:
         """
         Delete a record of the model.
 
@@ -208,10 +251,10 @@ class BaseModel:
 
         Parameters
         ----------
-            cls
-                The SQLAlchemy model class.
             id
                 The identifier of the record to be deleted.
+            to_json
+                keyword-only argument. if true, instance is converted to json.
 
         Returns
         -------
@@ -223,18 +266,66 @@ class BaseModel:
             exception occurs during the deletion process.
         """
         try:
-            db_cls = cls.query(cls).filter(cls.id == id).first()
+            if id:
+                data = cls.query().filter(cls.id == id).first()
 
-            if not db_cls:
-                msg = 'Failed to update %s.' % cls.__name__
-                return handle_exception_msg(BussinesRulesError(msg), 'id not found.')
-            # if db_cls:
-            db.session.delete(db_cls)
-            # db_cls.is_deleted = True
-            db.session.commit()
-
-            return db_cls.to_json()
+                if not data:
+                    msg = f'Failed to delete id {id} from {cls.__name__}.'
+                    e = BussinesRulesError(msg)
+                    return handle_exception_msg(e, 'id not found.')
+                # if data:
+                # data.is_deleted = True
+                session.delete(data)
+                session.commit()
+                if to_json:
+                    return cls.query_to_json(data)
+                return data
+            else:
+                session.delete()
+                session.commit()
+                msg = 'All items deleted from %s.' % cls.__name__
+                logger.info(msg)
+                return True
 
         except SQLAlchemyError as e:
             msg = 'Failed to delete %s.' % cls.__name__
+            return handle_exception_msg(e, msg)
+
+    @staticmethod
+    def json_type(x: datetime | T) -> float | T:
+        """
+        Convert datetime objects to timestamps and leave other types unchanged.
+
+        Parameters
+        ----------
+            x
+                The input value to be converted, only if type is datetime.
+
+        Returns
+        -------
+            Timestamp or x.
+        """
+        if isinstance(x, datetime):
+            return x.timestamp()
+        return x
+
+    def as_dict(self, exclude: Iterable[str] = ()) -> dict[str, Any]:
+        """
+        Generate a dictionary representation of the class instance.
+
+        Parameters
+        ----------
+            exclude
+                Keys to exclude from the resulting dictionary.
+
+        Returns
+        -------
+            The dictionary representation of the class instance.
+        """
+        try:
+            as_dict = {k: self.json_type(getattr(self, k)) for k in self.__dict__ if k not in exclude}
+            return as_dict
+
+        except TypeError as e:
+            msg = 'Failed to get dict representation.'
             return handle_exception_msg(e, msg)

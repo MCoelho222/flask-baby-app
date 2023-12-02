@@ -63,9 +63,9 @@ def configure_blueprint() -> None:
 
     api = Api(
         blueprint,
-        title='Data API',
+        title='Transmission Line Service API',
         version=data_api.__version__,
-        description='Powered by Me',
+        description='Powered by Pix Force',
         security='apikey',
     )
     api.add_namespace(occurrence_namespace, path='/occurrence')
