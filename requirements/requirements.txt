@@ -1,5 +1,5 @@
 cryptography
-flask==2.3.3 # The current version of Flask 3.0.0 has a bug, so a downgrade was made to 2.3.3 https://github.com/python-restx/flask-restx/issues/567
+flask # The current version of Flask 3.0.0 has a bug, so a downgrade was made to 2.3.3 https://github.com/python-restx/flask-restx/issues/567
 flask-cors
 flask-restx
 flask_sqlalchemy
